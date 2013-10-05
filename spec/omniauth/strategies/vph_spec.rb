@@ -45,7 +45,7 @@ describe OmniAuth::Strategies::Vph do
     context 'success' do
       let(:auth_hash){ last_request.env['omniauth.auth'] }
       before(:each) do
-        allow(@adaptor).to receive(:user_info).with('token_payload').and_return({
+        allow(@adaptor).to receive(:user_info).with('ticket_payload').and_return({
           "username" => "foobar",
           "language" => "",
           "country"=> "POLAND",
@@ -55,7 +55,7 @@ describe OmniAuth::Strategies::Vph do
           "email" => "foobar@gmail.pl"
         })
 
-        post('/auth/vph/callback', {token: 'token_payload'})
+        post('/auth/vph/callback', {ticket: 'ticket_payload'})
       end
 
       it 'should not redirect to error page' do
@@ -76,7 +76,7 @@ describe OmniAuth::Strategies::Vph do
         allow(@adaptor).to receive(:user_info).and_return(false)
       end
 
-      context 'when token is not present' do
+      context 'when ticket is not present' do
         it 'redirects to error page' do
           post('/auth/vph/callback', {})
 
@@ -85,9 +85,9 @@ describe OmniAuth::Strategies::Vph do
         end
       end
 
-      context "when token is empty" do
+      context "when ticket is empty" do
         it 'redirects to error page' do
-          post('/auth/vph/callback', {token: ""})
+          post('/auth/vph/callback', {ticket: ""})
 
           last_response.should be_redirect
           last_response.headers['Location'].should =~ %r{missing_credentials}
@@ -97,7 +97,7 @@ describe OmniAuth::Strategies::Vph do
       context "when username and password are present" do
         context "and bind on master interface server failed" do
           it 'redirects to error page' do
-            post('/auth/vph/callback', {token: 'token_payload'})
+            post('/auth/vph/callback', {ticket: 'ticket_payload'})
 
             last_response.should be_redirect
             last_response.headers['Location'].should =~ %r{invalid_credentials}

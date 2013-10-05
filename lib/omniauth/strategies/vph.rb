@@ -14,7 +14,7 @@ module OmniAuth
       def request_phase
         OmniAuth::Vph::Adaptor.validate @options
         f = OmniAuth::Form.new(:title => (options[:title] || 'VPH-Share Master Interface Ticket Authentication'), :url => callback_path)
-        f.password_field 'Token', 'token'
+        f.password_field 'Ticket', 'ticket'
         f.button "Sign In"
         f.to_response
       end
@@ -24,7 +24,7 @@ module OmniAuth
 
         return fail!(:missing_credentials) if missing_credentials?
         begin
-          @mi_user_info = @adaptor.user_info request['token']
+          @mi_user_info = @adaptor.user_info request['ticket']
           return fail!(:invalid_credentials) if !@mi_user_info
 
           @user_info = self.class.map_user(@mi_user_info, @options[:roles_map])
@@ -63,7 +63,7 @@ module OmniAuth
       end
 
       def missing_credentials?
-        request['token'].nil? or request['token'].empty?
+        request['ticket'].nil? or request['ticket'].empty?
       end
     end
   end
