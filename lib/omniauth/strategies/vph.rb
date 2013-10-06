@@ -27,7 +27,7 @@ module OmniAuth
           @mi_user_info = @adaptor.user_info request['ticket']
           return fail!(:invalid_credentials) if !@mi_user_info
 
-          @user_info = self.class.map_user(@mi_user_info, @options[:roles_map])
+          @user_info = map_user(@mi_user_info)
           super
         rescue Exception => e
           return fail!(:master_interface_error, e)
@@ -35,7 +35,7 @@ module OmniAuth
       end
 
       uid {
-        @user_info["email"]
+        @user_info["login"]
       }
 
       info {
@@ -48,18 +48,25 @@ module OmniAuth
 
       protected
 
-      def self.map_user(object, roles_map = {})
+      def map_user(object)
         user = {}
         user['email'] = object['email']
         user['login'] = object['username']
         user['full_name'] = object['fullname']
-        user['roles'] = []
+        user['roles'] = roles object
+
+        user
+      end
+
+      def roles(object)
+        roles_map = @options[:roles_map]
+        roles = []
         if object['role'] and roles_map
           roles_map.each do |k,v|
-            user['roles'] << v if object['role'].include? k
+            roles << v if object['role'].include? k
           end
         end
-        user
+        roles
       end
 
       def missing_credentials?

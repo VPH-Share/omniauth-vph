@@ -63,7 +63,7 @@ describe OmniAuth::Strategies::Vph do
       end
 
       it 'should map user info to Auth Hash' do
-        expect(auth_hash.uid).to eq 'foobar@gmail.pl'
+        expect(auth_hash.uid).to eq 'foobar'
         expect(auth_hash.info.email).to eq 'foobar@gmail.pl'
         expect(auth_hash.info.login).to eq 'foobar'
         expect(auth_hash.info.full_name).to eq 'Foo Bar'
