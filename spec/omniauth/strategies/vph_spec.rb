@@ -7,7 +7,7 @@ describe OmniAuth::Strategies::Vph do
   let(:app) do
     Rack::Builder.new {
       use OmniAuth::Test::PhonySession
-      use VphProvider, name: 'vph', title: 'MI Form', host: 'http://mi.host', roles_map: { 'cloudadmin' => 'admin', 'Developer' => 'developer' }
+      use VphProvider, name: 'vph', title: 'MI Form', host: 'http://mi.host'
       run lambda { |env| [404, {'Content-Type' => 'text/plain'}, [env.key?('omniauth.auth').to_s]] }
     }.to_app
   end
@@ -45,7 +45,7 @@ describe OmniAuth::Strategies::Vph do
     context 'success' do
       let(:auth_hash){ last_request.env['omniauth.auth'] }
       before(:each) do
-        allow(@adaptor).to receive(:user_info).with('ticket_payload').and_return({
+        info = {
           "username" => "foobar",
           "language" => "",
           "country"=> "POLAND",
@@ -53,7 +53,16 @@ describe OmniAuth::Strategies::Vph do
           "postcode" => "30950",
           "fullname" => "Foo Bar",
           "email" => "foobar@gmail.pl"
-        })
+        }
+
+        allow(@adaptor).to receive(:user_info).with('ticket_payload').and_return(info)
+
+        allow(@adaptor).to receive(:map_user).with(info).and_return({
+            'email' => info['email'],
+            'login' => info['username'],
+            'full_name' => info['fullname'],
+            'roles' => ['admin', 'developer']
+          })
 
         post('/auth/vph/callback', {ticket: 'ticket_payload'})
       end

@@ -33,6 +33,30 @@ module OmniAuth
           raise ConnectionError.new
         end
       end
+
+      def map_user(object)
+        user = {}
+        user['email'] = object['email']
+        user['login'] = object['username']
+        user['full_name'] = object['fullname']
+        user['roles'] = roles object
+
+        user
+      end
+
+      private
+
+      def roles(object)
+        roles_map = @configuration[:roles_map]
+        roles = []
+        if object['role'] and roles_map
+          roles_map.each do |k,v|
+            roles << v if object['role'].include? k
+          end
+        end
+        roles
+      end
+
     end
   end
 end
