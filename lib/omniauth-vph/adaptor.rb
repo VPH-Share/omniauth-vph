@@ -22,7 +22,7 @@ module OmniAuth
         Adaptor.validate(configuration)
         @configuration = configuration.dup
 
-        @connection = Faraday.new(url: @configuration[:host])
+        @connection = Faraday.new(url: @configuration[:host], :ssl => {:verify => false})
       end
 
       def user_info(ticket)
