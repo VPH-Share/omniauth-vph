@@ -3,7 +3,7 @@ require 'omniauth'
 
 module OmniAuth
   module Strategies
-    class Vph
+    class VphTicket
       include OmniAuth::Strategy
 
       option :title, 'VPH-Share Master Interface Ticket Authentication' #default title for authentication form

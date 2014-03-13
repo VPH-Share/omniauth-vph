@@ -1,13 +1,13 @@
 require 'spec_helper'
 
-describe OmniAuth::Strategies::Vph do
+describe OmniAuth::Strategies::VphTicket do
 
-  class VphProvider < OmniAuth::Strategies::Vph; end
+  class VphTicketProvider < OmniAuth::Strategies::VphTicket; end
 
   let(:app) do
     Rack::Builder.new {
       use OmniAuth::Test::PhonySession
-      use VphProvider, name: 'vph', title: 'MI Form', host: 'http://mi.host'
+      use VphTicketProvider, name: 'vph', title: 'MI Form', host: 'http://mi.host'
       run lambda { |env| [404, {'Content-Type' => 'text/plain'}, [env.key?('omniauth.auth').to_s]] }
     }.to_app
   end
