@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["mkasztelnik@gmail.com"]
   spec.description   = %q{A VPH-Share Master Interface strategy for OmniAuth.}
   spec.summary       = %q{A VPH-Share Master Interface strategy for OmniAuth.}
-  spec.homepage      = "http://dice.cyfronet.pl"
+  spec.homepage      = "https://gitlab.dev.cyfronet.pl/atmosphere/omniauth-vph"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
@@ -22,7 +22,10 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency     'multi_json'
   spec.add_runtime_dependency     'faraday'
   spec.add_development_dependency 'rspec'
-  spec.add_development_dependency "bundler", "~> 1.3"
+  spec.add_development_dependency "bundler"
   spec.add_development_dependency "rake"
   spec.add_development_dependency 'rack-test'
+  spec.add_development_dependency 'guard'
+  spec.add_development_dependency 'guard-rspec'
+  spec.add_development_dependency 'guard-bundler'
 end
