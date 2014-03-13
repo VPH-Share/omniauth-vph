@@ -3,7 +3,7 @@
 Use the VPH-Share ticket strategy as a middleware in your application:
 
 ```ruby
-use OmniAuth::Strategies::VphTicket,
+use OmniAuth::Strategies::Vphticket,
   host: 'https://portal.vph-share.eu',
   roles_map: {cloudadmin: 'admin', developer: 'developer'}
   ssl_verify: true #or false if self signed cert is used
