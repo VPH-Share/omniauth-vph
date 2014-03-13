@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe OmniAuth::Strategies::VphTicket do
+describe OmniAuth::Strategies::Vphticket do
 
   class VphticketProvider < OmniAuth::Strategies::Vphticket; end
 
