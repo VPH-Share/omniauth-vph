@@ -1,6 +1,31 @@
-# Omniauth::Vph
+# Omniauth Vph
 
-TODO: Write a gem description
+Use the VPH-Share ticket strategy as a middleware in your application:
+
+```ruby
+use OmniAuth::Strategies::VphTicket,
+  host: 'https://portal.vph-share.eu',
+  roles_map: {cloudadmin: 'admin', developer: 'developer'}
+  ssl_verify: true #or false if self signed cert is used
+```
+
+VPH-Share Ticket is required to use this strategy. It can be retrieved after successful log in into Master Interface, located in `host` URL.
+
+VPH-Share security mechanism is role based. `roles_map` allows to map VPH-Share
+roles into application specific roles.
+
+`ssl_verify` true/false flag is used to turn on or off ssl validation by Faraday client, while trigering ticket validation request.
+
+The result of invoking this strategy is a object with following elements:
+
+```
+login
+email
+full_name
+roles
+```
+
+inside `roles` array application specific roles are returned based on `roles_map` hash.
 
 ## Installation
 
@@ -15,10 +40,6 @@ And then execute:
 Or install it yourself as:
 
     $ gem install omniauth-vph
-
-## Usage
-
-TODO: Write usage instructions here
 
 ## Contributing
 
