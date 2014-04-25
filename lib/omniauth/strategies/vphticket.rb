@@ -3,19 +3,26 @@ require 'omniauth'
 
 module OmniAuth
   module Strategies
+    #
+    # Vph user ticket omniauth strategy.
+    #
     class Vphticket
       include OmniAuth::Strategy
+      DEFAULT_TITLE = 'VPH-Share Master Interface Ticket Authentication'
 
-      option :title, 'VPH-Share Master Interface Ticket Authentication' #default title for authentication form
+      option :title,  DEFAULT_TITLE
       option :host
 
       option :roles_map
 
       def request_phase
         OmniAuth::Vph::Adaptor.validate @options
-        f = OmniAuth::Form.new(:title => (options[:title] || 'VPH-Share Master Interface Ticket Authentication'), :url => callback_path)
+        f = OmniAuth::Form.new(
+              title: (options[:title] || DEFAULT_TITLE),
+              url: callback_path
+            )
         f.password_field 'Ticket', 'ticket'
-        f.button "Sign In"
+        f.button 'Sign In'
         f.to_response
       end
 
@@ -25,29 +32,21 @@ module OmniAuth
         return fail!(:missing_credentials) if missing_credentials?
         begin
           @mi_user_info = @adaptor.user_info request['ticket']
-          return fail!(:invalid_credentials) if !@mi_user_info
+          return fail!(:invalid_credentials) unless @mi_user_info
 
           @user_info = @adaptor.map_user(@mi_user_info)
           super
-        rescue Exception => e
+        rescue => e
           return fail!(:master_interface_error, e)
         end
       end
 
-      uid {
-        @user_info["login"]
-      }
-
-      info {
-        @user_info
-      }
-
-      extra {
-        { :raw_info => @mi_user_info }
-      }
+      uid { @user_info['login'] }
+      info { @user_info }
+      extra { { raw_info: @mi_user_info } }
 
       def missing_credentials?
-        request['ticket'].nil? or request['ticket'].empty?
+        request['ticket'].nil? || request['ticket'].empty?
       end
     end
   end

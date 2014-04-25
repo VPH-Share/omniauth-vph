@@ -5,11 +5,18 @@ describe OmniAuth::Strategies::Vphticket do
   class VphticketProvider < OmniAuth::Strategies::Vphticket; end
 
   let(:app) do
-    Rack::Builder.new {
+    Rack::Builder.new do
       use OmniAuth::Test::PhonySession
-      use VphticketProvider, name: 'vph', title: 'MI Form', host: 'http://mi.host'
-      run lambda { |env| [404, {'Content-Type' => 'text/plain'}, [env.key?('omniauth.auth').to_s]] }
-    }.to_app
+      use VphticketProvider,
+          name: 'vph',
+          title: 'MI Form',
+          host: 'http://mi.host'
+
+      run lambda { |env|
+            [404, { 'Content-Type' => 'text/plain' },
+             [env.key?('omniauth.auth').to_s]]
+          }
+    end.to_app
   end
 
   let(:session) do
@@ -17,22 +24,23 @@ describe OmniAuth::Strategies::Vphticket do
   end
 
   describe '/auth/vph' do
-    before(:each){ get '/auth/vph' }
+    before(:each) { get '/auth/vph' }
 
     it 'displays a form' do
-      last_response.status.should == 200
-      last_response.body.should be_include("<form")
+      expect(last_response.status).to eq 200
+      expect(last_response.body).to include('<form')
     end
 
     it 'has the callback as the action for the form' do
-      last_response.body.should be_include("action='/auth/vph/callback'")
+      expect(last_response.body).to include("action='/auth/vph/callback'")
     end
 
-     it 'should have a text field' do
-      last_response.body.scan('<input').size.should == 1
+    it 'has a text field' do
+      expect(last_response.body.scan('<input').size).to eq 1
     end
+
     it 'has a label of the form title' do
-      last_response.body.scan('MI Form').size.should > 1
+      expect(last_response.body.scan('MI Form').size).to be > 1
     end
   end
 
@@ -43,40 +51,41 @@ describe OmniAuth::Strategies::Vphticket do
     end
 
     context 'success' do
-      let(:auth_hash){ last_request.env['omniauth.auth'] }
+      let(:auth_hash) { last_request.env['omniauth.auth'] }
       before(:each) do
         info = {
-          "username" => "foobar",
-          "language" => "",
-          "country"=> "POLAND",
-          "role" => [ "Developer", "admin", "cloudadmin", "vph" ],
-          "postcode" => "30950",
-          "fullname" => "Foo Bar",
-          "email" => "foobar@gmail.pl"
+          'username' => 'foobar',
+          'language' => '',
+          'country' => 'POLAND',
+          'role' => %w(Developer admin cloudadmin vph),
+          'postcode' => '30950',
+          'fullname' => 'Foo Bar',
+          'email' => 'foobar@gmail.pl'
         }
 
-        allow(@adaptor).to receive(:user_info).with('ticket_payload').and_return(info)
+        allow(@adaptor).to receive(:user_info)
+          .with('ticket_payload').and_return(info)
 
-        allow(@adaptor).to receive(:map_user).with(info).and_return({
+        allow(@adaptor).to receive(:map_user).with(info).and_return(
             'email' => info['email'],
             'login' => info['username'],
             'full_name' => info['fullname'],
-            'roles' => ['admin', 'developer']
-          })
+            'roles' => %w(admin developer)
+          )
 
-        post('/auth/vph/callback', {ticket: 'ticket_payload'})
+        post('/auth/vph/callback', ticket: 'ticket_payload')
       end
 
-      it 'should not redirect to error page' do
-        last_response.should_not be_redirect
+      it 'does not redirect to error page' do
+        expect(last_response).not_to be_redirect
       end
 
-      it 'should map user info to Auth Hash' do
+      it 'maps user info to Auth Hash' do
         expect(auth_hash.uid).to eq 'foobar'
         expect(auth_hash.info.email).to eq 'foobar@gmail.pl'
         expect(auth_hash.info.login).to eq 'foobar'
         expect(auth_hash.info.full_name).to eq 'Foo Bar'
-        expect(auth_hash.info.roles).to eq ['admin', 'developer']
+        expect(auth_hash.info.roles).to eq %w(admin developer)
       end
     end
 
@@ -89,27 +98,33 @@ describe OmniAuth::Strategies::Vphticket do
         it 'redirects to error page' do
           post('/auth/vph/callback', {})
 
-          last_response.should be_redirect
-          last_response.headers['Location'].should =~ %r{missing_credentials}
+          expect(last_response).to be_redirect
+          expect(
+              last_response.headers['Location']
+            ).to be =~ /missing_credentials/
         end
       end
 
-      context "when ticket is empty" do
+      context 'when ticket is empty' do
         it 'redirects to error page' do
-          post('/auth/vph/callback', {ticket: ""})
+          post('/auth/vph/callback', ticket: '')
 
-          last_response.should be_redirect
-          last_response.headers['Location'].should =~ %r{missing_credentials}
+          expect(last_response).to be_redirect
+          expect(
+              last_response.headers['Location']
+            ).to be =~ /missing_credentials/
         end
       end
 
-      context "when username and password are present" do
-        context "and bind on master interface server failed" do
+      context 'when username and password are present' do
+        context 'and bind on master interface server failed' do
           it 'redirects to error page' do
-            post('/auth/vph/callback', {ticket: 'ticket_payload'})
+            post('/auth/vph/callback', ticket: 'ticket_payload')
 
-            last_response.should be_redirect
-            last_response.headers['Location'].should =~ %r{invalid_credentials}
+            expect(last_response).to be_redirect
+            expect(
+                last_response.headers['Location']
+              ).to be =~ /invalid_credentials/
           end
         end
       end
