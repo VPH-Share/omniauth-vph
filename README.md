@@ -1,4 +1,4 @@
-# Omniauth Vph
+# Omniauth Vph [![Build Status](https://travis-ci.org/dice-cyfronet/omniauth-vph.svg)](https://travis-ci.org/dice-cyfronet/omniauth-vph) [![Code Climate](https://codeclimate.com/github/dice-cyfronet/omniauth-vph/badges/gpa.svg)](https://codeclimate.com/github/dice-cyfronet/omniauth-vph) [![Test Coverage](https://codeclimate.com/github/dice-cyfronet/omniauth-vph/badges/coverage.svg)](https://codeclimate.com/github/dice-cyfronet/omniauth-vph) [![Dependency Status](https://gemnasium.com/dice-cyfronet/omniauth-vph.svg)](https://gemnasium.com/dice-cyfronet/omniauth-vph)
 
 Use the VPH-Share ticket strategy as a middleware in your application:
 

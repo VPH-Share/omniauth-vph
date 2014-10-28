@@ -2,6 +2,10 @@ $LOAD_PATH.unshift File.expand_path('..', __FILE__)
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'rspec'
 require 'rack/test'
+
+require "codeclimate-test-reporter"
+CodeClimate::TestReporter.start
+
 require 'omniauth'
 require 'omniauth-vph'
 
