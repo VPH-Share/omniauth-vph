@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    omniauth-vph (1.0.0)
+    omniauth-vph (1.1.0.pre)
       faraday
       multi_json
       omniauth (~> 1.0)
