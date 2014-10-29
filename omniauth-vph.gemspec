@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ['mkasztelnik@gmail.com']
   spec.description   = %q{A VPH-Share Master Interface strategy for OmniAuth.}
   spec.summary       = %q{A VPH-Share Master Interface strategy for OmniAuth.}
-  spec.homepage      = 'https://gitlab.dev.cyfronet.pl/atmosphere/omniauth-vph'
+  spec.homepage      = 'https://github.com/dice-cyfronet/omniauth-vph'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files`.split($/)
