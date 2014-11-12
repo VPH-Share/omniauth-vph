@@ -1,9 +1,7 @@
 language: ruby
-
 rvm:
-  - 2.1.1
-
+- 2.1.1
 addons:
   code_climate:
     repo_token:
-      secure: pC6nMKkuv0aS00grV3wE4Ex7RTxRSoFX7fiU0KSLOUJeVfVuY9hTBXheeyO56d1gkfNauXpc0y4MlqpbUuI4gPdYUp2beNBpifRyIvEe9Ul3wDEDsBVyFp2ATw4TBMjESW0oXGBWAYuglpjIYAupZh+GpkMxbd8+9lE1gKLMvBw=
+      secure: gG/jCFKIUxaSEMkJCShfL2rMzUpA7drnEPTuAGBiOGQ+ZREkAZoFUby29IqRbNGE6U9WwarcuYERU4DhZffFAT9Vvereoo/9F7YVB8HLJAixc5s8Z+Ulg/RgGieT0hA1ZtvQo1k/osI0F48bTL3rZfFPOJTpAFduFF0xy/NTvvc=
